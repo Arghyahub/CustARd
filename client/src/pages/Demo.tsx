@@ -8,12 +8,13 @@ interface forme {
     }
 }
 
-const OurOnlyProduct = ['vaseline' , 'vaseline'] ;
+const OurOnlyProduct = [{name: 'vaseline', category: 'cream'}, {name: "Boroline", category: "Cream"}] ;
 
 
 const Demo = () => {
     const [SelectedProduct, setSelectedProduct] = useState(null) ;
     const [ShowAR, setShowAR] = useState(false) ;
+    const [Options, setOptions] = useState([]) ;
 
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement> & forme) => {
         e.preventDefault() ;
@@ -33,7 +34,7 @@ const Demo = () => {
 
 
         const match = OurOnlyProduct.filter((elem)=> {
-            return nouns.includes(elem.toLowerCase());
+            return nouns.includes(elem.category.toLowerCase());
         })
 
         if (!match || !match.length){
@@ -42,7 +43,9 @@ const Demo = () => {
         }
 
         console.log(match) ;
-        setSelectedProduct(match[0])
+        setOptions([...match]) ;
+
+        // setSelectedProduct(match[0].name)
     }
 
   return (
@@ -62,6 +65,13 @@ const Demo = () => {
                         )}
                     </div>
                     <div className="flex-flex-col overflow-y-auto">
+                    
+                    <div className="flex flex-col gap-2 my-2">
+                        {Options.map((elem,ind) => (
+                            <button key={ind} className='my-2 py-2 px-3 bg-green-500 w-20' onClick={() => setSelectedProduct(elem.name)} >{elem.name}</button>
+                        ))}
+                        
+                    </div>
 
                     </div>
                 </div>

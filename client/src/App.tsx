@@ -15,6 +15,7 @@ import Demo from "./pages/Demo";
 import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
+import Test from "./test/Test";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/demo",
     element: <Demo />
+  },
+  {
+    path: "/test",
+    element: <Test />
   },
   {
     path: "*",
