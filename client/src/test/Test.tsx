@@ -101,21 +101,21 @@ export default function Component() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious to="#" />
+              <PaginationPrevious href="#" />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink to="#">1</PaginationLink>
+              <PaginationLink href="#">1</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink to="#" isActive>
+              <PaginationLink href="#" isActive>
                 2
               </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink to="#">3</PaginationLink>
+              <PaginationLink href="#">3</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext to="#" />
+              <PaginationNext href="#" />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
