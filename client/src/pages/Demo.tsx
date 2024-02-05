@@ -8,7 +8,7 @@ interface forme {
     }
 }
 
-const OurOnlyProduct = ['vaseline'] ;
+const OurOnlyProduct = ['vaseline' , 'vaseline'] ;
 
 
 const Demo = () => {
@@ -25,7 +25,12 @@ const Demo = () => {
         // NLP shuru
         const doc = nlp(text);
         // console.log(doc.verbs().toInfinitive().unique().out('array'))
-        const nouns = doc.nouns().toSingular().unique().toLowerCase().out('array') ;
+        // console.log(doc.nouns().toSingular().unique().toLowerCase().out('array'))
+        const verbs = doc.verbs().toInfinitive().unique().out('array') ; 
+        const nouns1 = doc.nouns().toSingular().unique().toLowerCase().out('array') ;
+
+        const nouns = nouns1.concat(verbs) ;
+
 
         const match = OurOnlyProduct.filter((elem)=> {
             return nouns.includes(elem.toLowerCase());
@@ -36,7 +41,7 @@ const Demo = () => {
             return ;
         }
 
-        // console.log(match[0]) ;
+        console.log(match) ;
         setSelectedProduct(match[0])
     }
 
