@@ -14,7 +14,7 @@ const Navbar = ({ className = "" }) => {
   return (
     <div
       className={cn(
-        "bg-[var(--foreground)] h-14 flex flex-row items-center",
+        "bg-secdark text-primary h-14 flex flex-row items-center",
         className
       )}
     >
