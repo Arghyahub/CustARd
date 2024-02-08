@@ -23,7 +23,7 @@ const Navbar = ({ className = "" }) => {
         <Sidebar TriggerIcon={BarsSVG} />
         <LogoSVG className="ml-3 w-8 h-8 text-[var(--secondary)]" />
         <h6 className="text-white special-font ml-2 font-semibold">
-          W h e r e I L e f t
+          CustARd.
         </h6>
       </div>
 

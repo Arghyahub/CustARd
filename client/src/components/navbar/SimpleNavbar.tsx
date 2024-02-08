@@ -11,7 +11,7 @@ const SimpleNavbar = ({className=''}) => {
         <Link to='/'>
           <LogoSVG />
         </Link>
-        <p className='font-sans text-white'>W h e r e I L e f t</p>
+        <p className='font-sans text-white'>CustARd.</p>
       </div>
 
       <div className="flex flex-row ml-auto gap-4 mx-2">

@@ -53,14 +53,12 @@ const Auth = () => {
   return (
     <div className="h-screen w-screen flex flex-col">
       <SimpleNavbar />
-      <div className="h-full w-full flex flex-row justify-center items-center bg-[var(--hover)] shadow-2xl">
-
-        <div className="w-11/12 h-5/6 backdrop-blur-3xl bg-[var(--primary)] rounded-xl shadow-2xl flex flex-row">
-          <div className={`right-img h-full w-3/5 flex flex-row justify-center ${screenWidth<700? 'hidden':''}`}>
-            <img src={AuthVec} alt="Vector Image" className="h-full w-full object-contain p-2" />
+        <div className="w-11/12 h-full bg-white rounded-xl flex flex-row">
+          <div className={`right-img h-full w-3/5 flex flex-row justify-center items-center bg-black text-white text-5xl font-bold ${screenWidth<700? 'hidden':''}`}>
+            CustARd.
           </div>
 
-          <div className={`left-form flex flex-col h-full justify-center items-center p-4 rounded-xl gap-4 ${screenWidth<700? 'w-full':'w-2/5'}`}>
+          <div className={`left-form lg:px-6 flex flex-col h-full justify-center items-center p-4 rounded-xl gap-4 ${screenWidth<700? 'w-full':'w-2/5'}`}>
             {(screenWidth<700) && (
               <img src={AuthVec} alt="Vector Image" className="h-40 w-40 object-contain p-2 -mb-7" />
             )}
@@ -97,7 +95,7 @@ const Auth = () => {
             }
           </div>
 
-        </div>
+   
       </div>
     </div>
   );

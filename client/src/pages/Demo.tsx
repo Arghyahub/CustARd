@@ -1,5 +1,4 @@
 import React, { ReactEventHandler, useState } from 'react'
-import Navbar from '@/components/navbar/Navbar'
 import nlp from 'compromise';
 
 interface forme {
@@ -50,7 +49,6 @@ const Demo = () => {
 
   return (
     <div className="flex flex-col w-full h-[95vh]">
-        <Navbar />
         <div className="flex flex-row w-full h-full border">
             {/* Left box */}
             <div className="flex flex-col h-full w-full border p-2">

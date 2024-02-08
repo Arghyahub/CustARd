@@ -13,6 +13,7 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Demo from "./pages/Demo";
 import Products from "./pages/Products";
+import SingleProduct from "./pages/SingleProduct";
 import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/products",
     element: <Products />
+  },
+  {
+    path: "/product:id",
+    element: <SingleProduct />
   },
   {
     path: "*",
