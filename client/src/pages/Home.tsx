@@ -38,10 +38,10 @@ const Home = () => {
                   New Products
                 </div>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Discover the latest gadgets
+                  Discover the latest products.
                 </h1>
                 <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Shop the best deals on smartphones, laptops, and accessories.
+                  Shop the best deals on skin care products, and accessories.
                 </p>
               </div>
             <div><img
@@ -54,9 +54,9 @@ const Home = () => {
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container flex flex-col items-center justify-center px-4 space-y-4 md:px-6">
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Unbox the Future</h1>
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">View. Experience. Buy.</h1>
               <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                The latest gadgets at your fingertips. Fast shipping. Top brands. Amazing prices.
+                The latest products at your fingertips. Fast shipping. Top brands. Amazing prices.
               </p>
             </div>
             <form className="flex flex-col gap-2 min-[400px]:flex-row sm:gap-4 lg:gap-2">
@@ -163,10 +163,10 @@ const Home = () => {
           <div className="container grid items-center justify-center gap-4 px-4 md:px-6 lg:gap-10">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                Experience the workflow the best frontend teams love.
+                Get ready for the ultimate glow-up!
               </h2>
-              <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                Let your team focus on shipping features instead of managing infrastructure with automated CI/CD.
+              <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center">
+                Your skin's next love affair is just a click away with our curated collection of 10+ amazing skincare products. We're here to pamper you more than your bf ;)
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">
