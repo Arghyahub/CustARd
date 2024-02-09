@@ -3,6 +3,7 @@ import mongoose, { ConnectOptions } from "mongoose";
 
 const DATABASE = process.env.DATABASE;
 import UserModel from "./user";
+import SellerModel from './seller';
 
 const connectDB = async () => {
     try {
@@ -20,5 +21,5 @@ const connectDB = async () => {
 export default connectDB;
 export {
     UserModel,
-
+    SellerModel
 }
