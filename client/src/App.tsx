@@ -9,7 +9,6 @@ import { useToast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 
 import "./App.css"
-import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Demo from "./pages/Demo";
 import Products from "./pages/Products";
@@ -23,15 +22,11 @@ import Test from "./test/Test";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing />
+    element: <Home />
   },
   {
     path: "/auth/:param?",
     element: <Auth />
-  },
-  {
-    path: "/home",
-    element: <Home />
   },
   {
     path: "/demo",
