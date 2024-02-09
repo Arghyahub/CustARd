@@ -26,6 +26,18 @@ router.get("/", async (req: Request, res: Response) => {
     }
 })
 
+// Fetching product detail for that id
+router.get("/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.query;
+        const product = await ProductModel.findOne({ id });
+        return res.status(200).json({ success: true, product });
+    } catch (error) {
+        console.log(":: Error in fetching products / (product.ts)", error);
+        return res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+})
+
 // Returning a product list based on the keywords recv from req
 router.post("/list", async (req: Request, res: Response) => {
     const { keywords } = req.body;
