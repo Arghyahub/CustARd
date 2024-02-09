@@ -6,7 +6,7 @@ export interface userType {
     email?: string,
     passwd?: string
 }
-export interface userDocType extends Document,userType {
+export interface userDocType extends Document, userType {
 }
 
 
