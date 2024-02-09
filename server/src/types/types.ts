@@ -26,6 +26,9 @@ export interface productType {
 export interface userDocType extends Document, userType {
 }
 
+export interface sellerDocType extends Document, sellerType {
+}
+
 
 // ..
 

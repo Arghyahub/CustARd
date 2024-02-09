@@ -2,7 +2,7 @@ import Express from "express";
 import cors from "cors"
 import mongoose from "mongoose";
 
-import { authRouter } from "./routes"
+import { authRouter, sellerRouter } from "./routes"
 import connectDB from "./db";
 
 const app = Express();
@@ -11,6 +11,7 @@ app.use(Express.json({ limit: '50mb' }));
 
 // Using routes
 app.use("/auth", authRouter);
+app.use("/seller", sellerRouter);
 
 // :::: Important Settings :::::
 const port = 8000;
