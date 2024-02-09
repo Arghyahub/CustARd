@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Demo from "./pages/Demo";
 import Products from "./pages/Products";
 import SingleProduct from "./pages/SingleProduct";
+import SellerDash from "./pages/SellerDashboard";
 import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/product:id",
     element: <SingleProduct />
+  },
+  {
+    path: "/sellerdash",
+    element: <SellerDash />
   },
   {
     path: "*",
