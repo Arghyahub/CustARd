@@ -11,7 +11,8 @@ export interface sellerType {
     name?: string,
     email?: string,
     passwd?: string,
-    role?: string
+    role?: string,
+    products?: productType[]
 }
 
 export interface productType {

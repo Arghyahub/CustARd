@@ -61,45 +61,26 @@ export default function SellerDash() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-bold">Vaseline</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
-                  Description of the product. This is a really cool item you
-                  should buy.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold">$199</span>
-                  <Button size="sm">Delete</Button>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-bold">Vaseline</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
-                  Description of the product. This is a really cool item you
-                  should buy.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold">$199</span>
-                  <Button size="sm">Delete</Button>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-bold">Vaseline</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
-                  Description of the product. This is a really cool item you
-                  should buy.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold">$199</span>
-                  <Button size="sm">Delete</Button>
-                </div>
-              </CardContent>
-            </Card>
+            {user && user.products?.length > 0 ? (
+              user.products.map((product, i) => (
+                <Card key={i}>
+                  <CardContent className="p-4">
+                    <h3 className="font-bold">{product.name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
+                      {product.desc}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold">{product.price}</span>
+                      <Button size="sm">Delete</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <p className="text-md text-gray-500 dark:text-gray-400 py-4">
+                No products to show!
+              </p>
+            )}
           </div>
         </CardContent>
       </Card>

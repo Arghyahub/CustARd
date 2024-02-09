@@ -24,10 +24,15 @@ const validateUser = async (req: Request & dotUser, res: Response, next: NextFun
         }
         const user = await UserModel.findOne({ _id: id, email: email });
         if (!user) {
-            return res.status(404).json({ success: false, valid: false, msg: "Please login again" })
+            const seller = await SellerModel.findOne({ _id: id, email: email });
+            if (!seller) {
+                return res.status(404).json({ success: false, valid: false, msg: "Please login again!" })
+            }
+            req.user = seller;
+        } else {
+            req.user = user;
         }
 
-        req.user = user;
         next();
     }
     catch (err) {
