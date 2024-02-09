@@ -19,7 +19,9 @@ export interface productType {
     desc?: string,
     price?: string,
     image?: string,
-    arLink?: string
+    arLink?: string,
+    keywords?: string[],
+    createdAt?: Date
 }
 
 
@@ -31,6 +33,3 @@ export interface sellerDocType extends Document, sellerType {
 
 
 // ..
-
-
-
