@@ -62,6 +62,8 @@ class USER {
             }
         } catch (error) {
             console.log(error);
+            navigate('/');
+            setUser(null)
         }
         finally {
             setLoadingState({ open: false, text: '' });
@@ -101,7 +103,7 @@ class USER {
 
     public static async login(email: string, passwd: string, setToastState, navigate: NavigateFunction, setLoadingState: SetterOrUpdater<LoadingStateType>) {
         try {
-            setLoadingState({ open: true, text: 'Loggin In' });
+            setLoadingState({ open: true, text: 'Logging In' });
             if (!(email.length) || !(passwd.length)) {
                 setToastState({ title: "Oops!", desc: "Ensure All Fields Are Filled", hasFunc: false });
                 return;
@@ -137,9 +139,53 @@ class USER {
 
 }
 
+class SELLER {
+    public static async validate(navigate: NavigateFunction, setUser: SetterOrUpdater<UserDataType>, setLoadingState: SetterOrUpdater<LoadingStateType>, route = '/sellerDash') {
+        try {
+            setLoadingState({ open: true, text: '...Setting up everything...' });
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/seller/auth');
+                setUser(null)
+                return;
+            }
+            const resp = await fetch(`${BACKEND}/seller/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: token })
+            })
+            const res: ValidateRespType = await resp.json();
 
+            if (res && !res.valid) {
+                localStorage.removeItem('token');
+                navigate('/');
+                setUser(null)
+            }
+
+            if (res.user) {
+                localStorage.setItem("token", token);
+                setUser(res.user);
+                navigate(route);
+            }
+            else {
+                navigate('/');
+                setUser(null)
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+            navigate('/');
+            setUser(null)
+        }
+        finally {
+            setLoadingState({ open: false, text: '' });
+        }
+    }
+}
 
 export {
     USER,
-
+    SELLER
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { loadingAtom, screenWidthAtom, toastParamAtom, userDataAtom } from "@/recoil/atom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { useNavigate, useParams } from "react-router-dom";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   AuthVec,
   EmailSVG,
@@ -10,7 +9,6 @@ import {
   LockSVG,
   EditSVG
 } from "@/assets/index";
-
 import {
   Input
 } from "@/components/reusables/index";
@@ -95,9 +93,8 @@ const Auth = () => {
               </div>
             </form>
           }
+          <Link to="/seller/auth">Looking to login as seller?</Link>
         </div>
-
-
       </div>
     </div>
   );

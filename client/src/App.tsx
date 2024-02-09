@@ -14,6 +14,7 @@ import Demo from "./pages/Demo";
 import Products from "./pages/Products";
 import SingleProduct from "./pages/SingleProduct";
 import SellerDash from "./pages/SellerDashboard";
+import SellerAuth from "./pages/SellerAuth";
 import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/auth/:param?",
     element: <Auth />
+  },
+  {
+    path: "/seller/:param?",
+    element: <SellerAuth />
   },
   {
     path: "/demo",
@@ -71,17 +76,17 @@ const App = () => {
   }, []); // complete
 
   // Toast config
-  useEffect(()=>{
-    if (ToastState.desc.length===0) return;
-    const copyToast = {...ToastState} ;
-    if (copyToast.hasFunc){
+  useEffect(() => {
+    if (ToastState.desc.length === 0) return;
+    const copyToast = { ...ToastState };
+    if (copyToast.hasFunc) {
       toast({ title: copyToast.title, description: copyToast.desc, action: <ToastAction onClick={copyToast.func} altText="Try again">Try again</ToastAction>, duration: 6000 })
     }
-    else{
-      toast({ title: copyToast.title, description: copyToast.desc, duration: 3000})
+    else {
+      toast({ title: copyToast.title, description: copyToast.desc, duration: 3000 })
     }
-    setToastState({title: '',desc:'',hasFunc: false, func: ()=>{}}) ;
-  },[ToastState])
+    setToastState({ title: '', desc: '', hasFunc: false, func: () => { } });
+  }, [ToastState])
 
 
 
