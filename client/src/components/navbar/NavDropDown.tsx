@@ -35,10 +35,9 @@ import { useNavigate } from "react-router-dom";
 const NavDropDown = () => {
   const navigate = useNavigate();
   const logout = () => {
-    localStorage.removeItem('token') ;
-    navigate('/');
+    localStorage.removeItem('token');
+    navigate('/auth');
   }
-
 
   return (
     <DropdownMenu>
@@ -58,7 +57,7 @@ const NavDropDown = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
@@ -82,11 +81,11 @@ const NavDropDown = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled>
           <Cloud className="mr-2 h-4 w-4" />
-          <span>Disabled future option</span>
+          <span>More options coming soon!</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
       </DropdownMenuContent>

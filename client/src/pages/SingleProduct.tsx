@@ -1,43 +1,66 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/rrJCUikjyXg
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import Demo from "../pages/Demo"
+import { useEffect, useState } from "react"
+const BACKEND = import.meta.env.VITE_BACKEND;
+
+interface productParams {
+  name: string,
+  desc: string,
+  price: string,
+  createdAt: Date,
+  arLink: string,
+  image: string
+}
 
 export default function Component() {
+  const [detail, setDetail] = useState<productParams>();
+  const { id } = useParams();
+
+  const fetchDetails = async () => {
+    const resp = await fetch(`${BACKEND}/product/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    const res = await resp.json();
+    console.log(res?.product);
+    setDetail(res?.product)
+  }
+
+  useEffect(() => {
+    fetchDetails();
+  }, [id])
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900">
       <div className="py-12 lg:py-16">
         <div className="grid gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto">
           <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-start">
             <div className="flex">
-             <Demo />
+              <Demo />
             </div>
-            <div className="flex flex-col gap-4 lg:gap-8 items-start">
-              <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">VASELINE® HEALING JELLY</h1>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-0.5">
-                  <StarIcon className="w-5 h-5 fill-primary" />
-                  <StarIcon className="w-5 h-5 fill-primary" />
-                  <StarIcon className="w-5 h-5 fill-primary" />
-                  <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                  <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+            {detail &&
+              <div className="flex flex-col gap-4 lg:gap-8 items-start">
+                <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">{detail.name}</h1>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-0.5">
+                    <StarIcon className="w-5 h-5 fill-primary" />
+                    <StarIcon className="w-5 h-5 fill-primary" />
+                    <StarIcon className="w-5 h-5 fill-primary" />
+                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+                  </div>
                 </div>
-              </div>
-              <div className="grid gap-4 text-base lg:text-xl leading-loose">
-                <p>Trusted to protect your family’s skin for 150 years. With properties that help accelerate your skin’s natural healing process, the Original Vaseline® Healing Jelly protects and restores your skin and gives it the extra care it needs.</p>
-                <p>
-                  This 100% pure and triple-purified Vaseline® Jelly is hypoallergenic and helps to heal dry, damaged, and cracked skin. It keeps your skin moisturized by creating a protective barrier and locking in moisture.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <div className="text-4xl font-bold">$99</div>
-                <Button size="lg">Add to cart</Button>
-              </div>
-            </div>
+                <div className="grid gap-4 text-base lg:text-xl leading-loose">
+                  <p>{detail.desc}</p>
+                </div>
+                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                  <div className="text-4xl font-bold">{detail.price}</div>
+                  <Button size="lg">Add to cart</Button>
+                </div>
+              </div>}
           </div>
         </div>
       </div>

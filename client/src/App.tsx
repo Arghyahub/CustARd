@@ -9,12 +9,12 @@ import { useToast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 
 import "./App.css"
-import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Demo from "./pages/Demo";
 import Products from "./pages/Products";
 import SingleProduct from "./pages/SingleProduct";
 import SellerDash from "./pages/SellerDashboard";
+import SellerAuth from "./pages/SellerAuth";
 import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
@@ -23,15 +23,15 @@ import Test from "./test/Test";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing />
+    element: <Home />
   },
   {
     path: "/auth/:param?",
     element: <Auth />
   },
   {
-    path: "/home",
-    element: <Home />
+    path: "/seller/:param?",
+    element: <SellerAuth />
   },
   {
     path: "/demo",
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
     element: <Products />
   },
   {
-    path: "/product:id",
+    path: "/product/:id",
     element: <SingleProduct />
   },
   {
@@ -76,17 +76,17 @@ const App = () => {
   }, []); // complete
 
   // Toast config
-  useEffect(()=>{
-    if (ToastState.desc.length===0) return;
-    const copyToast = {...ToastState} ;
-    if (copyToast.hasFunc){
+  useEffect(() => {
+    if (ToastState.desc.length === 0) return;
+    const copyToast = { ...ToastState };
+    if (copyToast.hasFunc) {
       toast({ title: copyToast.title, description: copyToast.desc, action: <ToastAction onClick={copyToast.func} altText="Try again">Try again</ToastAction>, duration: 6000 })
     }
-    else{
-      toast({ title: copyToast.title, description: copyToast.desc, duration: 3000})
+    else {
+      toast({ title: copyToast.title, description: copyToast.desc, duration: 3000 })
     }
-    setToastState({title: '',desc:'',hasFunc: false, func: ()=>{}}) ;
-  },[ToastState])
+    setToastState({ title: '', desc: '', hasFunc: false, func: () => { } });
+  }, [ToastState])
 
 
 

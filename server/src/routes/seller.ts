@@ -4,15 +4,15 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 
 const SECRET = process.env.SECRET
-import { UserModel } from "../db";
-import { validateUser } from "../middleware/authware"
-import { userDocType } from '../types/types';
+import { SellerModel } from "../db";
+import { validateSeller } from "../middleware/authware"
+import { sellerDocType } from '../types/types';
 
 const router = Express();
 
 interface signupParam { name: string, email: string, passwd: string };
 interface loginParam { email: string, passwd: string }
-interface RequestWithUser extends Request { user: userDocType }
+interface RequestWithUser extends Request { user: sellerDocType }
 
 // /signup -> For creating new user
 router.post('/signup', async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ router.post('/signup', async (req: Request, res: Response) => {
         }
 
         // Check if user already exists
-        const findUser = await UserModel.findOne({ email });
+        const findUser = await SellerModel.findOne({ email });
         if (findUser) {
             return res.status(403).json({ success: false, msg: 'Account already exists' });
         }
@@ -31,7 +31,7 @@ router.post('/signup', async (req: Request, res: Response) => {
         // This is a new user, hash the password
         const hashedPassword = await bcrypt.hash(passwd, 10);
 
-        const newUser = await UserModel.create({ name, email, passwd: hashedPassword });
+        const newUser = await SellerModel.create({ name, email, passwd: hashedPassword, role: "seller" });
         await newUser.save();
 
         // Generate token for client
@@ -41,10 +41,10 @@ router.post('/signup', async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(payload, SECRET);
-        return res.status(200).json({ success: true, msg: 'Account successfully created', token: token });
+        return res.status(200).json({ success: true, msg: 'Seller Account successfully created', token: token });
     }
     catch (err) {
-        console.log(":: Error in Signup (auth.ts) ::\n", err);
+        console.log(":: Error in Seller Signup (seller.ts) ::\n", err);
         res.status(500).json({ success: false, msg: 'Internal server error' });
     }
 })
@@ -57,14 +57,14 @@ router.post('/login', async (req: Request, res: Response) => {
         if (!email || !passwd) {
             return res.status(404).json({ success: false, msg: "Some fields are empty" })
         }
-        const user = await UserModel.findOne({ email: email });
+        const user = await SellerModel.findOne({ email: email });
         if (!user) {
-            return res.status(404).json({ success: false, valid: false, msg: "User not found" })
+            return res.status(404).json({ success: false, valid: false, msg: "Seller not found!" })
         }
 
         const passwdMatch = await bcrypt.compare(passwd, user.passwd);
         if (!passwdMatch) {
-            return res.status(401).json({ success: false, msg: "Wrong password" });
+            return res.status(401).json({ success: false, msg: "Incorrect password!" });
         }
         const payload = {
             id: user._id,
@@ -72,15 +72,15 @@ router.post('/login', async (req: Request, res: Response) => {
         }
         const token = jwt.sign(payload, SECRET);
 
-        return res.status(200).json({ success: true, token: token, msg: "Successfully logged in" })
+        return res.status(200).json({ success: true, token: token, msg: "Successfully logged in!" })
     } catch (error) {
-        console.log(":: /login(auth.ts) ::\n", error);
+        console.log(":: /seller/login(seller.ts) ::\n", error);
         return res.status(200).json({ success: false, msg: "Internal server error" })
     }
 })
 
 // Validating user with token
-router.post('/validate', validateUser, (req: RequestWithUser, res) => {
+router.post('/validate', validateSeller, (req: RequestWithUser, res) => {
     res.status(200).json({ user: req.user });
 })
 

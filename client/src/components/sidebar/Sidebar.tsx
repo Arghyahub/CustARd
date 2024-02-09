@@ -15,16 +15,16 @@ import { cn } from "@/lib/utils"
 import { FunctionComponent } from "react";
 
 interface SidebarPropsType {
-  TriggerIcon?: FunctionComponent<{ className?: string|undefined }>;
+  TriggerIcon?: FunctionComponent<{ className?: string | undefined }>;
   Position?: 'left' | 'right' | 'top' | 'bottom',
 }
 
-const Sidebar = ({TriggerIcon=BarsSVG, Position='left'}:SidebarPropsType) => {
+const Sidebar = ({ TriggerIcon = BarsSVG, Position = 'left' }: SidebarPropsType) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
         <button className="active:rotate-180 duration-700">
-            <TriggerIcon className='w-8 h-8' />
+          <TriggerIcon className='w-8 h-8' />
         </button>
       </SheetTrigger>
       <SheetContent side={Position}>
@@ -36,10 +36,9 @@ const Sidebar = ({TriggerIcon=BarsSVG, Position='left'}:SidebarPropsType) => {
         </SheetHeader> */}
 
         <div className="flex flex-col w-full h-full mt-4 gap-2">
-          <div className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4"><Link to='/'>Some Link or function</Link></div>
-          <div className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4"><Link to='/'>Some Link or function</Link></div>
-          <div className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4"><Link to='/'>Some Link or function</Link></div>
-          <div className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4"><Link to='/'>Some Link or function</Link></div>
+          <Link to="/" className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4">Home</Link>
+          <Link to="/products" className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4">Products</Link>
+          <Link to="/sellerDash" className="w-full h-14 bg-gray-100 rounded-md flex flex-row items-center pl-4">Become a seller</Link>
         </div>
 
         <div className="grid gap-4 py-4">

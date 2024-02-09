@@ -5,10 +5,10 @@ import { useRecoilState } from "recoil";
 import { USER } from "@/services/service";
 import { loadingAtom, userDataAtom } from "@/recoil/atom";
 import Navbar from "@/components/navbar/Navbar";
-import {PropagateLoader} from "react-spinners";
+import { PropagateLoader } from "react-spinners";
 import Footer from "../components/footer/footer"
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { CardContent, Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -16,39 +16,39 @@ import { Input } from "@/components/ui/input"
 import HeroImage from "@/assets/HeroImg.png"
 import Soap from "@/assets/Soaps.jpg"
 import Profile from "@/assets/profilepic.jpg"
+import SimpleNavbar from "@/components/navbar/SimpleNavbar";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [User, setUser] = useRecoilState(userDataAtom) ;
-  const [LoadingState, setLoadingState] = useRecoilState(loadingAtom) ;
+  const [user, setUser] = useRecoilState(userDataAtom);
+  const [LoadingState, setLoadingState] = useRecoilState(loadingAtom);
 
- /* useEffect(() => {
-    // USER.validate(navigate,setUser,setLoadingState,'/home') ;  // Isko uncomment karna hai
-    
-    navigate("/demo")   // Testing purpose k liye demo page
-  },[])*/
+  useEffect(() => {
+    console.log("User deatis: ", user);
+  }, [user])
+
   return (
     <div className="flex flex-col w-full">
-      <Navbar />
+      {user && user.email !== "" ? <Navbar /> : <SimpleNavbar />}
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-16 xl:py-32 px-4 space-y-4 md:px-12">
           <div className="grid lg:grid-cols-2 px-4 md:pl-3 items-center">
             <div className="space-y-4 lg:px-24">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800 text-secdark">
-                  New Products
-                </div>
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Discover the latest products. ✨
-                </h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Shop the best deals on skin care products, and accessories.
-                </p>
+              <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800 text-secdark">
+                New Products
               </div>
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                Discover the latest products. ✨
+              </h1>
+              <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                Shop the best deals on skin care products, and accessories.
+              </p>
+            </div>
             <div><img
-                  alt="Image"
-                  className="aspect-video overflow-hidden rounded-xl object-cover object-center w-full h-full"
-                  src={HeroImage}
-                /></div>
+              alt="Image"
+              className="aspect-video overflow-hidden rounded-xl object-cover object-center w-full h-full"
+              src={HeroImage}
+            /></div>
           </div>
         </section>
         <section className="w-full py-12 md:py-16 lg:py-16 xl:py-48 bg-seclight">
@@ -61,7 +61,7 @@ const Home = () => {
             </div>
             <form className="flex flex-col gap-2 min-[400px]:flex-row sm:gap-4 lg:gap-2">
               <Input className="max-w-sm" placeholder="Enter your email" type="email" />
-              <Button type="submit">Sign Up</Button>
+              <Button type="submit">Sign Up for Newsletter</Button>
             </form>
           </div>
         </section>
@@ -69,69 +69,70 @@ const Home = () => {
           <div className="grid lg:grid-cols-2 px-4 md:pl-3 items-center">
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 my-3">
               <Card>
-                  <img
-                    alt="Thumbnail"
-                    className="aspect-post overflow-hidden object-cover object-center"
-                    height="200"
-                    src={Soap}
-                    width="300"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold">Vaseline</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Description of the product. This is a really cool item you should buy.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold">$199</span>
-                      <Button size="sm">Buy Now</Button>
-                    </div>
-                  </CardContent>
-                </Card><Card>
-                  <img
-                    alt="Thumbnail"
-                    className="aspect-post overflow-hidden object-cover object-center"
-                    height="200"
-                    src={Soap}
-                    width="300"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold">Vaseline</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Description of the product. This is a really cool item you should buy.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold">$199</span>
-                      <Button size="sm">Buy Now</Button>
-                    </div>
-                  </CardContent>
-                </Card><Card>
-                  <img
-                    alt="Thumbnail"
-                    className="aspect-post overflow-hidden object-cover object-center"
-                    height="200"
-                    src={Soap}
-                    width="300"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold">Vaseline</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Description of the product. This is a really cool item you should buy.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold">$199</span>
-                      <Button size="sm">Buy Now</Button>
-                    </div>
-                  </CardContent>
-                </Card></div>
-                <div className="space-y-4 lg:px-24">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800 text-secdark">
-                  Top Products
-                </div>
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Hot Deals ❤️‍🔥</h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Limited time offers. Grab them before they're gone.
-                </p>
+                <img
+                  alt="Thumbnail"
+                  className="aspect-post overflow-hidden object-cover object-center"
+                  height="200"
+                  src={Soap}
+                  width="300"
+                />
+                <CardContent className="p-4">
+                  <h3 className="font-bold">Vaseline</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Description of the product. This is a really cool item you should buy.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold">$199</span>
+                    <Button size="sm" onClick={() => navigate("/products")}>Buy Now</Button>
+                  </div>
+                </CardContent>
+              </Card><Card>
+                <img
+                  alt="Thumbnail"
+                  className="aspect-post overflow-hidden object-cover object-center"
+                  height="200"
+                  src={Soap}
+                  width="300"
+                />
+                <CardContent className="p-4">
+                  <h3 className="font-bold">Vaseline</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Description of the product. This is a really cool item you should buy.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold">$199</span>
+                    <Button size="sm" onClick={() => navigate("/products")}>Buy Now</Button>
+                  </div>
+                </CardContent>
+              </Card><Card>
+                <img
+                  alt="Thumbnail"
+                  className="aspect-post overflow-hidden object-cover object-center"
+                  height="200"
+                  src={Soap}
+                  width="300"
+                />
+                <CardContent className="p-4">
+                  <h3 className="font-bold">Vaseline</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Description of the product. This is a really cool item you should buy.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold">$199</span>
+                    <Button size="sm" onClick={() => navigate("/products")}>Buy Now</Button>
+                  </div>
+                </CardContent>
+              </Card></div>
+            <div className="space-y-4 lg:px-24">
+              <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800 text-secdark">
+                Top Products
               </div>
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Hot Deals ❤️‍🔥</h1>
+              <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                Limited time offers. Grab them before they're gone.
+              </p>
+              <Button size="lg" onClick={() => navigate("/products")}>Check out the products now!</Button>
+            </div>
           </div>
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 border-t">
@@ -172,10 +173,10 @@ const Home = () => {
             <div className="mx-auto w-full max-w-sm space-y-2">
               <form className="flex space-x-2">
                 <Input className="max-w-lg flex-1" placeholder="Enter your email" type="email" />
-                <Button className="bg-seclight text-secdark hover:text-seclight" type="submit">Sign Up</Button>
+                <Button className="bg-seclight text-secdark hover:text-seclight" type="submit">Sign Up to Newsletter</Button>
               </form>
               <p className="text-xs ">
-                Sign up to get notified when we launch.{" "}
+                Sign up to received updates and notifications on your email.{" "}
                 <Link className="underline underline-offset-2" to="#">
                   Terms & Conditions
                 </Link>
