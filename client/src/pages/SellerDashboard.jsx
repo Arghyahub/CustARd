@@ -6,19 +6,17 @@
  * @see https://v0.dev/t/M4pig9GXfda
  */
 
-import {
-  CardTitle,
-  CardHeader,
-  CardContent,
-  Card,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar/Navbar";
 import ProductForm from "@/components/ui/addproduct";
+import { useState } from "react";
 
 export default function Component() {
+  const [show, setShow] = useState(false);
+  const handleAddProduct = () => {
+    setShow(true);
+  };
   return (
     <div className="flex-1 w-screen">
       <Navbar />
@@ -46,10 +44,16 @@ export default function Component() {
       <Card>
         <CardHeader>
           <CardTitle>Existing Products</CardTitle>
-          <Button>Add New Product +</Button>
-          <div className="absolute top-0 w-[700px]">
-            <ProductForm />
-          </div>
+          <Button className="my-3" onClick={handleAddProduct}>
+            Add New Product +
+          </Button>
+          {show ? (
+            <div className="absolute top-0 w-[700px]">
+              <ProductForm />
+            </div>
+          ) : (
+            <></>
+          )}
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

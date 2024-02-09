@@ -3,8 +3,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 export default function Component() {
+
+  const handleCancel = () =>{
+    window.location.reload();
+  }
   return (
-    <div className="w-full w-[700px] top-0 left-0 translate-x-1/2 translate-y-1/2"><Card>
+    <div className="absolute w-screen"><Card>
       <CardHeader>
         <CardTitle className="text-2xl">Add Product</CardTitle>
         <CardDescription>Fill in the details below to add a new product.</CardDescription>
@@ -18,7 +22,10 @@ export default function Component() {
           <label htmlFor="description">Description</label>
           <Input className="" id="description" placeholder="Enter product description" />
         </div>
-        
+        <div className="space-y-2">
+          <label htmlFor="description">AR Link</label>
+          <Input className="" id="description" placeholder="Enter product AR link" />
+        </div>
           <div className="space-y-4">
               <label htmlFor="price">Price</label>
               <Input id="price" placeholder="Enter price" />
@@ -31,8 +38,9 @@ export default function Component() {
            
           </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="space-x-4">
         <Button>Save</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
       </CardFooter>
     </Card></div>
   )
