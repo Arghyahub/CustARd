@@ -42,9 +42,9 @@ export default function Component() {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 w-full">
-      <div className="flex py-12 lg:py-16 w-full">
+      <div className="lg:flex py-12 lg:py-16 w-full">
         {showAr ? <Demo arLink={"https://sketchfab.com/models/98a50c126fb04e32af738c13e8493689/embed"}/> : <></>}
-        <div className="grid gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full">
+        <div className="grid gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4">
           {/* {detail && ( */} 
             <div className="flex flex-col gap-4 lg:gap-8 items-start border w-full py-10 px-10">
               <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">
