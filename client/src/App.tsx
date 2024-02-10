@@ -19,7 +19,6 @@ import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
 import Test from "./test/Test";
-
 const BACKEND = import.meta.env.VITE_BACKEND;
 
 const router = createBrowserRouter([
