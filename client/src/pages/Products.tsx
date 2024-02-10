@@ -1,19 +1,17 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import Cream from "../assets/product.jpg"
 import placeholder from "../assets/placeholder.jpeg";
 import { Input } from "@/components/ui/input"
 import { SearchIcon } from "lucide-react"
 import Navbar from "@/components/navbar/Navbar"
 import { useEffect, useRef, useState } from "react"
 import nlp from 'compromise';
-import { 
+import {
   MessageCircleMore,
   Send
 } from 'lucide-react';
 import { useRecoilState } from "recoil";
 import { loadingAtom } from "@/recoil/atom";
-
 
 const BACKEND = import.meta.env.VITE_BACKEND;
 
@@ -44,12 +42,13 @@ interface ChatMsg {
 
 export default function Products() {
   const [products, setProduct] = useState([]);
-  const [showChat, setShowChat] = useState(false) ;
-  const [chats, setChats] = useState<ChatMsg[]>([{msg: 'How can I help you', user: 'bot'}])
-  const chatContainer = useRef(null) ;
+  const [showChat, setShowChat] = useState(false);
+  const [chats, setChats] = useState<ChatMsg[]>([{ msg: 'How can I help you', user: 'bot' }])
+  const chatContainer = useRef(null);
   const [LoadingState, setLoadingState] = useRecoilState(loadingAtom);
+  const navigate = useNavigate();
 
-  function calculateMatchCount(keywords,product) {
+  function calculateMatchCount(keywords, product) {
     return product.keywords.filter(keyword => keywords.includes(keyword)).length;
   }
 
@@ -64,11 +63,11 @@ export default function Products() {
     if (chatContainer.current) {
       chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
     }
-  }, [showChat,chats])
+  }, [showChat, chats])
 
   const fetchProducts = async () => {
     console.log(":: Fetching products");
-    setLoadingState({open: true, text: 'Fetching products...'});
+    setLoadingState({ open: true, text: 'Fetching products...' });
     try {
       const resp = await fetch(`${BACKEND}/product`, {
         method: 'GET',
@@ -80,30 +79,30 @@ export default function Products() {
       console.log(res?.products);
       setProduct(res?.products)
     } catch (error) {
-      console.log(error) ;
+      console.log(error);
     }
-    finally{
-      setLoadingState({open: false, text: ''});
+    finally {
+      setLoadingState({ open: false, text: '' });
       console.log(":: Done fetching products");
     }
   }
 
   const handleChatForm = async (e: React.FormEvent<HTMLFormElement> & ChatFormE) => {
     e.preventDefault();
-    const currchat = e.target.chad.value ;
-    e.target.chad.value = '' ;
+    const currchat = e.target.chad.value;
+    e.target.chad.value = '';
 
-    if (!currchat || !currchat.length){
+    if (!currchat || !currchat.length) {
       alert("No text?")
       return;
     }
-    setChats(prev => [...prev, {msg: currchat, user: 'cust'}])
+    setChats(prev => [...prev, { msg: currchat, user: 'cust' }])
 
     const doc = nlp(currchat);
-    const verbs = doc.verbs().toInfinitive().unique().out('array') ; 
-    const nouns1 = doc.nouns().toSingular().unique().toLowerCase().out('array') ;
+    const verbs = doc.verbs().toInfinitive().unique().out('array');
+    const nouns1 = doc.nouns().toSingular().unique().toLowerCase().out('array');
 
-    const nouns = nouns1.concat(verbs) ;
+    const nouns = nouns1.concat(verbs);
     const arr = []
     nouns.forEach((noun) => {
       const p = noun.split(' ');
@@ -118,17 +117,17 @@ export default function Products() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({keywords: arr})
+        body: JSON.stringify({ keywords: arr })
       })
       const res = await resp.json();
 
-      if (!res.products || !res.products.length){
-        setChats(prev => [...prev, {msg: 'No product found', user: 'bot'}])
+      if (!res.products || !res.products.length) {
+        setChats(prev => [...prev, { msg: 'No product found', user: 'bot' }])
       } else {
-        const products = res.products ;
-        products.sort((a, b) => calculateMatchCount(arr,b) - calculateMatchCount(arr,a));
+        const products = res.products;
+        products.sort((a, b) => calculateMatchCount(arr, b) - calculateMatchCount(arr, a));
         console.log(products);
-        setChats(prev => [...prev, {msg: 'Here are some products', user: 'bot', prod: products}])
+        setChats(prev => [...prev, { msg: 'Here are some products', user: 'bot', prod: products }])
       }
 
     } catch (error) {
@@ -168,11 +167,11 @@ export default function Products() {
               <div className="flex-1 p-4 gap-4 items-start">
                 <div className="flex items-center justify-between py-4">
                   <h3 className="font-semibold text-base md:text-lg">{product.name}</h3>
-                  <h4 className="font-semibold text-base md:text-lg">{product.price}</h4>
+                  <h4 className="font-semibold text-base md:text-lg">{"₹" + product.price}</h4>
                 </div>
-                <p className="text-sm text-gray-500 py-4">{product.desc}</p>
-                <Button className="w-full" size="icon">
-                  <Link to={`/product/${product._id}`}>Show More</Link>
+                <p className="text-sm text-gray-500 py-4 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.desc}</p>
+                <Button className="w-full" size="icon" onClick={() => navigate(`/product/${product._id}`)}>
+                  Show More
                 </Button>
               </div>
             </div>
@@ -183,34 +182,34 @@ export default function Products() {
               <button onClick={toggleChat} className="flex flex-row shadow-2xl justify-center items-center fixed bottom-20 right-24 h-20 z-50 w-20 rounded-full bg-secdark peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
                 <MessageCircleMore className="h-12 w-12 group-hover:h-14 group-hover:w-14 text-white peer-hover:h-14 peer-hover:w-14" />
               </button>
-            </div>  
-          ): (
-            <>
-            <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-200 shadow-xl">
-              <div className="chathead flex flex-row px-3 py-2 border border-b-slate-200 rounded-t-md bg-white">
-                <p className="mr-auto font-bold text-md text-secdark">Hello Customer</p>
-                <button onClick={toggleChat} className="text-black font-bold text-md">X</button>
-              </div>
-              <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto ">
-                { chats.map((chat, i) => (
-                  <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user==='bot'? 'mr-auto bg-blue-500 rounded-tr-md':'ml-auto bg-secdark rounded-tl-md'}`}>
-                    <p>{chat.msg}</p>
-                    {chat?.prod && chat.prod.map((prod, i) => {
-                      if (i<3) return (
-                        <Link to={`/product/${prod._id}`} key={`prod${i}`} className="underline text-green-100">{prod.name}</Link>
-                        )
-                      } 
-                    )}
-                  </div> 
-                ))}
-              </div>
-              <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 bg-slate-100 gap-1 rounded-b-md px-3">
-                <input placeholder="Searching for a product?" name="chad" type="text" className="w-full p-2 outline-none bg-slate-100" />
-                <button type="submit">
-                  <Send className="text-blue-600" />
-                </button>
-              </form>
             </div>
+          ) : (
+            <>
+              <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-200 shadow-xl">
+                <div className="chathead flex flex-row px-3 py-2 border border-b-slate-200 rounded-t-md bg-white">
+                  <p className="mr-auto font-bold text-md text-secdark">Hello Customer</p>
+                  <button onClick={toggleChat} className="text-black font-bold text-md">X</button>
+                </div>
+                <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto ">
+                  {chats.map((chat, i) => (
+                    <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user === 'bot' ? 'mr-auto bg-blue-500 rounded-tr-md' : 'ml-auto bg-secdark rounded-tl-md'}`}>
+                      <p>{chat.msg}</p>
+                      {chat?.prod && chat.prod.map((prod, i) => {
+                        if (i < 3) return (
+                          <Link to={`/product/${prod._id}`} key={`prod${i}`} className="underline text-green-100">{prod.name}</Link>
+                        )
+                      }
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 bg-slate-100 gap-1 rounded-b-md px-3">
+                  <input placeholder="Searching for a product?" name="chad" type="text" className="w-full p-2 outline-none bg-slate-100" />
+                  <button type="submit">
+                    <Send className="text-blue-600" />
+                  </button>
+                </form>
+              </div>
             </>
           )}
 

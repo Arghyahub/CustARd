@@ -29,7 +29,7 @@ export default function AddProduct() {
 
   const handleSubmit = async () => {
     console.log(product);
-    const { name, desc, price, arLink, keywords } = product;
+    const { name, desc, price, arLink, keywords, image } = product;
     if (!name || !price || !desc) {
       alert("Name, Desc and Price are required!");
       return;
@@ -40,7 +40,7 @@ export default function AddProduct() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, desc, price, arLink, keywords, token }),
+        body: JSON.stringify({ name, desc, price, arLink, keywords, image, token }),
       });
       const res = await resp.json();
       if (res.success) {
@@ -63,11 +63,54 @@ export default function AddProduct() {
     const { name, value } = e.target;
     // setProduct((prev) => ({ ...prev, [name]: value }));
     if (name === 'keywords') {
-    setProduct((prev) => ({ ...prev, [name]: value.split(',') }));
-  } else {
-    setProduct((prev) => ({ ...prev, [name]: value }));
-  }
+      setProduct((prev) => ({ ...prev, [name]: value.split(',') }));
+    } else {
+      setProduct((prev) => ({ ...prev, [name]: value }));
+    }
   };
+
+  const convertBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleImg = async (e: ChangeEvent<HTMLInputElement>) => {
+    const imgFile = e.target.files[0];
+
+    if (imgFile) {
+      try {
+        const base64 = await convertBase64(imgFile)
+        const resp: any = await fetch(`${BACKEND}/product/image`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ image: base64, token })
+        })
+        const res = await resp.json();
+        setProduct((prev) => ({ ...prev, image: res.imageUrl }))
+        setToastState({
+          title: "Woah!!",
+          desc: "Image uploaded!",
+          hasFunc: false,
+        });
+      } catch (error) {
+        console.error("Error converting image to base64:", error);
+        setToastState({ title: "Oops!", desc: "Error in uploading image!", hasFunc: false });
+      }
+    }
+  };
+
 
   const handleCancel = () => {
     window.location.reload();
@@ -94,7 +137,7 @@ export default function AddProduct() {
           </div>
           <div className="space-y-4">
             <label htmlFor="images">Product Image</label>
-            <Input id="images" name="image" type="file" />
+            <Input id="images" name="image" type="file" accept="image/*" onChange={handleImg} />
           </div>
           <div className="space-y-2">
             <label htmlFor="description">Description</label>

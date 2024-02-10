@@ -1,7 +1,7 @@
 import "dotenv/config"
 import Express, { Request, Response } from "express"
 import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
-import { ProductModel } from "../db";
+import { ProductModel, SellerModel } from "../db";
 import { validateSeller } from "../middleware/authware"
 import { sellerDocType, productType } from "../types/types";
 
@@ -29,8 +29,8 @@ router.get("/", async (req: Request, res: Response) => {
 // Fetching product detail for that id
 router.get("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.query;
-        const product = await ProductModel.findOne({ id });
+        const { id } = req.params;
+        const product = await ProductModel.findById(id);
         return res.status(200).json({ success: true, product });
     } catch (error) {
         console.log(":: Error in fetching products / (product.ts)", error);
@@ -57,7 +57,7 @@ router.post("/list", async (req: Request, res: Response) => {
 })
 
 // Uploading product image
-router.post("/image", validateSeller, (req: RequestWithUser, res) => {
+router.post("/image", validateSeller, (req: Request, res) => {
     const { image } = req.body;
     const opts: UploadApiOptions = {
         overwrite: true,
@@ -82,7 +82,7 @@ router.post("/image", validateSeller, (req: RequestWithUser, res) => {
 })
 
 // Creating a new product
-router.post("/create", validateSeller, async (req: Request, res) => {
+router.post("/create", validateSeller, async (req: RequestWithUser, res) => {
     try {
         const { name, desc, price, image, arLink, keywords } = req.body;
         if (!name || !desc || !price || !keywords) {
@@ -90,6 +90,10 @@ router.post("/create", validateSeller, async (req: Request, res) => {
         }
         const newProduct = await ProductModel.create({ name, desc, image, price, arLink, keywords })
         await newProduct.save();
+        const updated = await SellerModel.findByIdAndUpdate(req.user._id, { $push: { products: newProduct } })
+        if (!updated) {
+            return res.status(404).json({ success: false, msg: "Seller not found!" });
+        }
         return res.status(200).json({ success: true, msg: "Product successfully created", product: newProduct });
     } catch (error) {
         console.log(":: Error in creating product /create (product.ts) ::", error);
