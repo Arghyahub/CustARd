@@ -80,6 +80,8 @@ const App = () => {
     if (ToastState.desc.length === 0) return;
     const copyToast = { ...ToastState };
     if (copyToast.hasFunc) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       toast({ title: copyToast.title, description: copyToast.desc, action: <ToastAction onClick={copyToast.func} altText="Try again">Try again</ToastAction>, duration: 6000 })
     }
     else {

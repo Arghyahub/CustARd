@@ -5,7 +5,14 @@ import placeholder from "../assets/placeholder.jpeg";
 import { Input } from "@/components/ui/input"
 import { SearchIcon } from "lucide-react"
 import Navbar from "@/components/navbar/Navbar"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import nlp from 'compromise';
+import { 
+  MessageCircleMore,
+  Send
+} from 'lucide-react';
+
+
 const BACKEND = import.meta.env.VITE_BACKEND;
 
 interface loginRespType {
@@ -17,8 +24,30 @@ interface loginRespType {
   products?: [],
 }
 
+interface ChatFormE {
+  target: {
+    chad: HTMLInputElement
+  }
+}
+
 export default function Products() {
   const [products, setProduct] = useState([]);
+  const [showChat, setShowChat] = useState(false) ;
+  const [chats, setChats] = useState([{msg: 'hello', user: 'bot'},{msg:'hi', user:'cust'}])
+  const chatContainer = useRef(null) ;
+
+  const toggleChat = () => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+    }
+    setShowChat(prev => !prev);
+  }
+
+  useEffect(() => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+    }
+  }, [showChat,chats])
 
   const fetchProducts = async () => {
     const resp = await fetch(`${BACKEND}/product`, {
@@ -30,6 +59,25 @@ export default function Products() {
     const res: loginRespType = await resp.json();
     console.log(res?.products);
     setProduct(res?.products)
+  }
+
+  const handleChatForm = (e: React.FormEvent<HTMLFormElement> & ChatFormE) => {
+    e.preventDefault();
+    const currchat = e.target.chad.value ;
+    e.target.chad.value = '' ;
+
+    if (!currchat || !currchat.length){
+      alert("No text?")
+      return;
+    }
+    setChats(prev => [...prev, {msg: currchat, user: 'cust'}])
+
+    const doc = nlp(currchat);
+    const verbs = doc.verbs().toInfinitive().unique().out('array') ; 
+    const nouns1 = doc.nouns().toSingular().unique().toLowerCase().out('array') ;
+    const nouns = nouns1.concat(verbs) ;
+
+    
   }
 
   useEffect(() => {
@@ -73,6 +121,35 @@ export default function Products() {
               </div>
             </div>
           ))}
+
+          {!showChat ? (
+            <div className="group">
+              <button onClick={toggleChat} className="flex flex-row justify-center items-center fixed bottom-20 right-24 h-20 w-20 rounded-full bg-yellow-400 peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
+                <MessageCircleMore className="h-12 w-12 group-hover:h-14 group-hover:w-14 text-white peer-hover:h-14 peer-hover:w-14" />
+              </button>
+            </div>  
+          ): (
+            <>
+            <div className=" flex flex-col fixed rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-500 shadow-xl">
+              <div className="chathead flex flex-row px-3 py-2 border border-b-slate-500 rounded-t-md">
+                <p className="mr-auto">Hello Customer</p>
+                <button onClick={toggleChat} className="text-red-500 font-bold text-md">X</button>
+              </div>
+              <div ref={chatContainer} className="flex flex-col w-full h-full p-2 overflow-y-auto ">
+                { chats.map((chat, i) => (
+                  <div key={i} className={`flex flex-row items-center p-2 mb-2 text-white rounded-b-md ${chat.user==='bot'? 'mr-auto bg-blue-500 rounded-tr-md':'ml-auto bg-green-400 rounded-tl-md'}`}>{chat.msg}</div> 
+                ))}
+              </div>
+              <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 border border-t-slate-500 gap-1 rounded-b-md">
+                <input placeholder="Your query..." name="chad" type="text" className="w-full p-2 outline-none" />
+                <button type="submit">
+                  <Send className="text-blue-600" />
+                </button>
+              </form>
+            </div>
+            </>
+          )}
+
         </section>
       )
         : (
