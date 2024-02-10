@@ -24,6 +24,11 @@ export default function Component() {
     setShowAr(!showAr);
   };
 
+  const [addtoCart, setAddToCart] = useState(false);
+  const handleCart = () => {
+    setAddToCart(!addtoCart);
+  };
+
   const fetchDetails = async () => {
     const resp = await fetch(`${BACKEND}/product/${id}`, {
       method: "GET",
@@ -42,13 +47,12 @@ export default function Component() {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 w-full">
-      {detail && (
+      {/* {detail && ( */}
         <div className="lg:flex py-12 lg:py-16 w-full">
-          {showAr ? <Demo arLink={detail.arLink} /> : <></>}
-          <div className="grid gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4">
-            <div className="flex flex-col gap-4 lg:gap-8 items-start border w-full py-10 px-10">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4 border">
+            <div className="flex flex-col gap-4 lg:gap-8 items-start w-full py-10 px-10">
               <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">
-                {detail.name}
+                {/* {detail.name} */} Vaseline
               </h1>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-0.5">
@@ -60,19 +64,46 @@ export default function Component() {
                 </div>
               </div>
               <div className="grid gap-4 text-base lg:text-xl leading-loose">
-                <p>{detail.desc}</p>
+                {/* <p>{detail.desc}</p> */} This is the product.
               </div>
-              <div className="text-4xl font-bold">{detail.price}</div>
+              {/* <div className="text-4xl font-bold">{detail.price}</div> */}
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Button size="lg" onClick={handleShow}>
                   {!showAr ? <span>Show AR</span> : <span>Hide</span>}
                 </Button>
-                <Button size="lg">Add to cart</Button>
+                <Button size="lg" onClick={handleCart} disabled={addtoCart ? true: false}>
+                  Add to cart
+                </Button>
+                {addtoCart ? (
+                  <div className="absolute flex md:w-[500px] top-1/2 left-1/2 bg-seclight border shadow-xl p-4 lg:p-20 -translate-x-1/2 -translate-y-1/2">
+                    <div className="flex-1 justify-center items-center text-center">
+                      <p className="text-xl font-medium pb-2">
+                        🎊 Product Added to Cart 🎊
+                      </p>
+                      <p className="text-lg font-regular">
+                        More Features coming soon.
+                      </p>
+                      <p className="text-lg font-regular">Stay tuned...🤠</p>
+                      <Button size="lg" className="my-4" onClick={handleCart}>
+                        Close
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
+            </div>
+            <div className="grid w-full h-full">
+              {showAr ? (
+                <Demo arLink={detail.arLink} />
+              ) : (
+                <img src={detail?.image} className="w-full h-full object-cover" />
+              )}
             </div>
           </div>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 }

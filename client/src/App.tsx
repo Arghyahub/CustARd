@@ -19,6 +19,7 @@ import { screenWidthAtom, toastParamAtom } from "./recoil/atom";
 import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
 import Test from "./test/Test";
+const BACKEND = import.meta.env.VITE_BACKEND;
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,7 @@ const App = () => {
   const [ToastState, setToastState] = useRecoilState(toastParamAtom);
 
   useEffect(() => {
+    fetch(BACKEND,{method: 'GET', headers: { 'Content-Type': 'application/json'}})    // Just to fasten cold start
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -80,6 +82,8 @@ const App = () => {
     if (ToastState.desc.length === 0) return;
     const copyToast = { ...ToastState };
     if (copyToast.hasFunc) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       toast({ title: copyToast.title, description: copyToast.desc, action: <ToastAction onClick={copyToast.func} altText="Try again">Try again</ToastAction>, duration: 6000 })
     }
     else {
