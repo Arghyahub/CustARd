@@ -94,13 +94,13 @@ export default function Component() {
                 )}
               </div>
             </div>
-            {/* <div className="grid w-full h-full">
+            <div className="grid w-full h-full">
               {showAr ? (
                 <Demo arLink={detail.arLink} />
               ) : (
-                <img src={detail.image} className="w-full h-full" />
+                <img src={detail?.image} className="w-full h-full object-cover" />
               )}
-            </div> */}
+            </div>
           </div>
         </div>
       {/* )} */}
