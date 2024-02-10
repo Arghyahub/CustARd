@@ -20,6 +20,8 @@ import Home from "./pages/Home";
 import { Loading } from "./components/reusables";
 import Test from "./test/Test";
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,6 +68,7 @@ const App = () => {
   const [ToastState, setToastState] = useRecoilState(toastParamAtom);
 
   useEffect(() => {
+    fetch(BACKEND,{method: 'GET', headers: { 'Content-Type': 'application/json'}})    // Just to fasten cold start
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
