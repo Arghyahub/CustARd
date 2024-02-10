@@ -14,7 +14,7 @@ const OurOnlyProduct = [
   { name: "Boroline", category: "Cream" },
 ];
 
-const Demo = ({ arLink }) => {
+const Demo = ({ arLink }:{ arLink?: string }) => {
   return (
     <div className="flex flex-col w-full h-[45vh]">
       <div className="flex flex-row w-full h-full border">

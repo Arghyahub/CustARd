@@ -43,7 +43,7 @@ export default function AddProduct() {
         setToastState({ title: "Oops!", desc: res.msg, hasFunc: false });
       }
     } catch (error) {
-
+      console.log(error) ;
     }
   }
 
