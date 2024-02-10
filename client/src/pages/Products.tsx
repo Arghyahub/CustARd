@@ -5,7 +5,14 @@ import placeholder from "../assets/placeholder.jpeg";
 import { Input } from "@/components/ui/input"
 import { SearchIcon } from "lucide-react"
 import Navbar from "@/components/navbar/Navbar"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import nlp from 'compromise';
+import { 
+  MessageCircleMore,
+  Send
+} from 'lucide-react';
+
+
 const BACKEND = import.meta.env.VITE_BACKEND;
 
 interface loginRespType {
@@ -17,8 +24,44 @@ interface loginRespType {
   products?: [],
 }
 
+interface ChatFormE {
+  target: {
+    chad: HTMLInputElement
+  }
+}
+
+type prod = {
+  name: string,
+  _id: string
+}
+interface ChatMsg {
+  msg: string,
+  user: string
+  prod?: prod[]
+}
+
 export default function Products() {
   const [products, setProduct] = useState([]);
+  const [showChat, setShowChat] = useState(false) ;
+  const [chats, setChats] = useState<ChatMsg[]>([{msg: 'How can I help you', user: 'bot'}])
+  const chatContainer = useRef(null) ;
+
+  function calculateMatchCount(keywords,product) {
+    return product.keywords.filter(keyword => keywords.includes(keyword)).length;
+  }
+
+  const toggleChat = () => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+    }
+    setShowChat(prev => !prev);
+  }
+
+  useEffect(() => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+    }
+  }, [showChat,chats])
 
   const fetchProducts = async () => {
     const resp = await fetch(`${BACKEND}/product`, {
@@ -30,6 +73,54 @@ export default function Products() {
     const res: loginRespType = await resp.json();
     console.log(res?.products);
     setProduct(res?.products)
+  }
+
+  const handleChatForm = async (e: React.FormEvent<HTMLFormElement> & ChatFormE) => {
+    e.preventDefault();
+    const currchat = e.target.chad.value ;
+    e.target.chad.value = '' ;
+
+    if (!currchat || !currchat.length){
+      alert("No text?")
+      return;
+    }
+    setChats(prev => [...prev, {msg: currchat, user: 'cust'}])
+
+    const doc = nlp(currchat);
+    const verbs = doc.verbs().toInfinitive().unique().out('array') ; 
+    const nouns1 = doc.nouns().toSingular().unique().toLowerCase().out('array') ;
+
+    const nouns = nouns1.concat(verbs) ;
+    const arr = []
+    nouns.forEach((noun) => {
+      const p = noun.split(' ');
+      arr.push(...p);
+    })
+
+    console.log(arr);
+
+    try {
+      const resp = await fetch(`${BACKEND}/product/list`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({keywords: arr})
+      })
+      const res = await resp.json();
+
+      if (!res.products || !res.products.length){
+        setChats(prev => [...prev, {msg: 'No product found', user: 'bot'}])
+      } else {
+        const products = res.products ;
+        products.sort((a, b) => calculateMatchCount(arr,b) - calculateMatchCount(arr,a));
+        console.log(products);
+        setChats(prev => [...prev, {msg: 'Here are some products', user: 'bot', prod: products}])
+      }
+
+    } catch (error) {
+      console.log(":: Error in fetching products list /list / (product.ts)", error);
+    }
   }
 
   useEffect(() => {
@@ -73,6 +164,43 @@ export default function Products() {
               </div>
             </div>
           ))}
+
+          {!showChat ? (
+            <div className="group">
+              <button onClick={toggleChat} className="flex flex-row justify-center items-center fixed bottom-20 right-24 h-20 z-50 w-20 rounded-full bg-yellow-400 peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
+                <MessageCircleMore className="h-12 w-12 group-hover:h-14 group-hover:w-14 text-white peer-hover:h-14 peer-hover:w-14" />
+              </button>
+            </div>  
+          ): (
+            <>
+            <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-500 shadow-xl">
+              <div className="chathead flex flex-row px-3 py-2 border border-b-slate-500 rounded-t-md bg-white">
+                <p className="mr-auto">Hello Customer</p>
+                <button onClick={toggleChat} className="text-red-500 font-bold text-md">X</button>
+              </div>
+              <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto ">
+                { chats.map((chat, i) => (
+                  <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user==='bot'? 'mr-auto bg-blue-500 rounded-tr-md':'ml-auto bg-green-400 rounded-tl-md'}`}>
+                    <p>{chat.msg}</p>
+                    {chat?.prod && chat.prod.map((prod, i) => {
+                      if (i<3) return (
+                        <Link to={`/product/${prod._id}`} key={`prod${i}`} className="underline text-green-100">{prod.name}</Link>
+                        )
+                      } 
+                    )}
+                  </div> 
+                ))}
+              </div>
+              <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 border border-t-slate-500 gap-1 rounded-b-md">
+                <input placeholder="Your query..." name="chad" type="text" className="w-full p-2 outline-none" />
+                <button type="submit">
+                  <Send className="text-blue-600" />
+                </button>
+              </form>
+            </div>
+            </>
+          )}
+
         </section>
       )
         : (
