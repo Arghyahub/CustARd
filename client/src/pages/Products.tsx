@@ -11,6 +11,8 @@ import {
   MessageCircleMore,
   Send
 } from 'lucide-react';
+import { useRecoilState } from "recoil";
+import { loadingAtom } from "@/recoil/atom";
 
 
 const BACKEND = import.meta.env.VITE_BACKEND;
@@ -45,6 +47,7 @@ export default function Products() {
   const [showChat, setShowChat] = useState(false) ;
   const [chats, setChats] = useState<ChatMsg[]>([{msg: 'How can I help you', user: 'bot'}])
   const chatContainer = useRef(null) ;
+  const [LoadingState, setLoadingState] = useRecoilState(loadingAtom);
 
   function calculateMatchCount(keywords,product) {
     return product.keywords.filter(keyword => keywords.includes(keyword)).length;
@@ -64,15 +67,25 @@ export default function Products() {
   }, [showChat,chats])
 
   const fetchProducts = async () => {
-    const resp = await fetch(`${BACKEND}/product`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-    const res: loginRespType = await resp.json();
-    console.log(res?.products);
-    setProduct(res?.products)
+    console.log(":: Fetching products");
+    setLoadingState({open: true, text: 'Fetching products...'});
+    try {
+      const resp = await fetch(`${BACKEND}/product`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      const res: loginRespType = await resp.json();
+      console.log(res?.products);
+      setProduct(res?.products)
+    } catch (error) {
+      console.log(error) ;
+    }
+    finally{
+      setLoadingState({open: false, text: ''});
+      console.log(":: Done fetching products");
+    }
   }
 
   const handleChatForm = async (e: React.FormEvent<HTMLFormElement> & ChatFormE) => {
