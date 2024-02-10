@@ -16,10 +16,10 @@ const OurOnlyProduct = [
 
 const Demo = ({ arLink }) => {
   return (
-    <div className="flex flex-col w-full h-[95vh]">
+    <div className="flex flex-col w-full h-[45vh]">
       <div className="flex flex-row w-full h-full border">
         {/* Right box */}
-        <div className="flex flex-col justify-center items-center h-full w-full m-2">
+        <div className="flex flex-col justify-center items-center h-full w-full">
           <div className="sketchfab-embed-wrapper w-full h-full">
             <iframe
               className="w-full h-full"

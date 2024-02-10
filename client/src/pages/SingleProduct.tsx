@@ -44,9 +44,8 @@ export default function Component() {
     <div className="bg-gray-50 dark:bg-gray-900 w-full">
       {detail && (
         <div className="lg:flex py-12 lg:py-16 w-full">
-          {showAr ? <Demo arLink={detail.arLink} /> : <></>}
-          <div className="grid gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4">
-            <div className="flex flex-col gap-4 lg:gap-8 items-start border w-full py-10 px-10">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4 border">
+            <div className="flex flex-col gap-4 lg:gap-8 items-start w-full py-10 px-10">
               <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">
                 {detail.name}
               </h1>
@@ -69,6 +68,13 @@ export default function Component() {
                 </Button>
                 <Button size="lg">Add to cart</Button>
               </div>
+            </div>
+            <div className="grid w-full h-full">
+              {showAr ? (
+                <Demo arLink={detail.arLink} />
+              ) : (
+                <img src={detail.image} className="w-full h-full" />
+              )}
             </div>
           </div>
         </div>
