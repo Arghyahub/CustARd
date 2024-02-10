@@ -179,21 +179,21 @@ export default function Products() {
           ))}
 
           {!showChat ? (
-            <div className="group">
-              <button onClick={toggleChat} className="flex flex-row justify-center items-center fixed bottom-20 right-24 h-20 z-50 w-20 rounded-full bg-yellow-400 peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
+            <div className="group shadow-2xl">
+              <button onClick={toggleChat} className="flex flex-row shadow-2xl justify-center items-center fixed bottom-20 right-24 h-20 z-50 w-20 rounded-full bg-secdark peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
                 <MessageCircleMore className="h-12 w-12 group-hover:h-14 group-hover:w-14 text-white peer-hover:h-14 peer-hover:w-14" />
               </button>
             </div>  
           ): (
             <>
-            <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-500 shadow-xl">
-              <div className="chathead flex flex-row px-3 py-2 border border-b-slate-500 rounded-t-md bg-white">
-                <p className="mr-auto">Hello Customer</p>
-                <button onClick={toggleChat} className="text-red-500 font-bold text-md">X</button>
+            <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-200 shadow-xl">
+              <div className="chathead flex flex-row px-3 py-2 border border-b-slate-200 rounded-t-md bg-white">
+                <p className="mr-auto font-bold text-md text-secdark">Hello Customer</p>
+                <button onClick={toggleChat} className="text-black font-bold text-md">X</button>
               </div>
               <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto ">
                 { chats.map((chat, i) => (
-                  <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user==='bot'? 'mr-auto bg-blue-500 rounded-tr-md':'ml-auto bg-green-400 rounded-tl-md'}`}>
+                  <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user==='bot'? 'mr-auto bg-blue-500 rounded-tr-md':'ml-auto bg-secdark rounded-tl-md'}`}>
                     <p>{chat.msg}</p>
                     {chat?.prod && chat.prod.map((prod, i) => {
                       if (i<3) return (
@@ -204,8 +204,8 @@ export default function Products() {
                   </div> 
                 ))}
               </div>
-              <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 border border-t-slate-500 gap-1 rounded-b-md">
-                <input placeholder="Your query..." name="chad" type="text" className="w-full p-2 outline-none" />
+              <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 bg-slate-100 gap-1 rounded-b-md px-3">
+                <input placeholder="Searching for a product?" name="chad" type="text" className="w-full p-2 outline-none bg-slate-100" />
                 <button type="submit">
                   <Send className="text-blue-600" />
                 </button>
