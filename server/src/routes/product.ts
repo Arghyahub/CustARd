@@ -4,6 +4,7 @@ import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 import { ProductModel, SellerModel } from "../db";
 import { validateSeller } from "../middleware/authware"
 import { sellerDocType, productType } from "../types/types";
+import { ObjectId } from "mongodb";
 
 const router = Express();
 
@@ -34,6 +35,27 @@ router.get("/:id", async (req: Request, res: Response) => {
         return res.status(200).json({ success: true, product });
     } catch (error) {
         console.log(":: Error in fetching products / (product.ts)", error);
+        return res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+}).delete("/:id", async (req: Request, res: Response) => {
+    try {
+        let { sellerId, productId } = req.body;
+        if (!sellerId || !productId) {
+            return res.status(404).json({ success: false, msg: "Seller id or product id missing!" });
+        }
+        productId = new ObjectId(productId);
+
+        const isDeleted = await ProductModel.findByIdAndDelete(productId);
+        if (!isDeleted) {
+            return res.status(404).json({ success: false, msg: "Can't delete from products!" });
+        }
+        const sellerDelete = await SellerModel.findByIdAndUpdate(sellerId, { $pull: { products: { _id: productId } } }, { new: true });
+        if (!sellerDelete) {
+            return res.status(404).json({ success: false, msg: "Can't delete from seller!" });
+        }
+        return res.status(200).json({ success: true, msg: "Product successfully deleted!" });
+    } catch (error) {
+        console.log(":: Error in deleting product /product (product.ts) ::", error);
         return res.status(500).json({ success: false, msg: "Internal server error" });
     }
 })
