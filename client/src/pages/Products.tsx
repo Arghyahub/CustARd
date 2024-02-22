@@ -43,7 +43,9 @@ interface ChatMsg {
 export default function Products() {
   const [products, setProduct] = useState([]);
   const [showChat, setShowChat] = useState(false);
-  const [chats, setChats] = useState<ChatMsg[]>([{ msg: 'How can I help you', user: 'bot' }])
+  const [showingRec, setShowingRec] = useState(false);
+  const [recommandation, setRecommandation] = useState([]);
+  const [chats, setChats] = useState<ChatMsg[]>([{ msg: 'Enter the description for which you want to find the product', user: 'bot' }])
   const chatContainer = useRef(null);
   const [LoadingState, setLoadingState] = useRecoilState(loadingAtom);
   const navigate = useNavigate();
@@ -58,6 +60,20 @@ export default function Products() {
     }
     setShowChat(prev => !prev);
   }
+
+  const showRecommandation = () => {
+    setShowChat(false);
+    setShowingRec(true);
+  }
+
+  const resetRecommandation = () => {
+    setShowChat(false);
+    setShowingRec(false);
+  }
+
+  useEffect(() => {
+    console.log("Recommandation: ", recommandation);
+  }, [recommandation])
 
   useEffect(() => {
     if (chatContainer.current) {
@@ -109,8 +125,6 @@ export default function Products() {
       arr.push(...p);
     })
 
-    console.log(arr);
-
     try {
       const resp = await fetch(`${BACKEND}/product/list`, {
         method: 'POST',
@@ -127,6 +141,7 @@ export default function Products() {
         const products = res.products;
         products.sort((a, b) => calculateMatchCount(arr, b) - calculateMatchCount(arr, a));
         console.log(products);
+        setRecommandation(products);
         setChats(prev => [...prev, { msg: 'Here are some products', user: 'bot', prod: products }])
       }
 
@@ -143,77 +158,127 @@ export default function Products() {
     <>
       <Navbar />
       <div className="relative m-4 md:m-6">
-        <SearchIcon className="absolute left-3.5 top-2.5 h-4 w-4 text-gray-500 " />
+        {/* <SearchIcon className="absolute left-3.5 top-2.5 h-4 w-4 text-gray-500 " />
         <Input
           className="w-full bg-white shadow-none appearance-none pl-8"
           placeholder="Search products..."
           type="search"
-        />
+        /> */}
       </div>
       {products.length > 0 ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-start gap-4 md:gap-6 p-4 md:p-6">
-          {products.map((product, i) => (
-            <div className="flex flex-col rounded-lg overflow-hidden border-2 shadow-lg" key={i}>
-              <Link className="flex-1" to="#">
-                <span className="sr-only">View</span>
-              </Link>
-              <img
-                alt="Product 1"
-                className="aspect-video w-full object-cover"
-                height={300}
-                src={product.image || placeholder}
-                width={400}
-              />
-              <div className="flex-1 p-4 gap-4 items-start">
-                <div className="flex items-center justify-between py-4">
-                  <h3 className="font-semibold text-base md:text-lg">{product.name}</h3>
-                  <h4 className="font-semibold text-base md:text-lg">{"₹" + product.price}</h4>
-                </div>
-                <p className="text-sm text-gray-500 py-4 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.desc}</p>
-                <Button className="w-full" size="icon" onClick={() => navigate(`/product/${product._id}`)}>
-                  Show More
+        <>
+          {!showingRec ?
+            <div className="flex px-6">
+              <h3 className="text-2xl font-medium">All Listed Products</h3>
+            </div>
+            : <div className="flex gap-4 px-6 items-center">
+              <h3 className="text-2xl font-medium">Recommanded Products</h3>
+              <div>
+                <Button className="w-full px-3" size="icon" variant="secondary" onClick={resetRecommandation}>
+                  Show All Products
                 </Button>
               </div>
             </div>
-          ))}
-
-          {!showChat ? (
-            <div className="group shadow-2xl">
-              <button onClick={toggleChat} className="flex flex-row shadow-2xl justify-center items-center fixed bottom-20 right-24 h-20 z-50 w-20 rounded-full bg-secdark peer group-hover:h-24 group-hover:w-24 group-hover:bottom-[4.5rem] group-hover:right-[5.5rem]" >
-                <MessageCircleMore className="h-12 w-12 group-hover:h-14 group-hover:w-14 text-white peer-hover:h-14 peer-hover:w-14" />
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-20 md:right-24 border border-slate-200 shadow-xl">
-                <div className="chathead flex flex-row px-3 py-2 border border-b-slate-200 rounded-t-md bg-white">
-                  <p className="mr-auto font-bold text-md text-secdark">Hello Customer</p>
-                  <button onClick={toggleChat} className="text-black font-bold text-md">X</button>
-                </div>
-                <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto ">
-                  {chats.map((chat, i) => (
-                    <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user === 'bot' ? 'mr-auto bg-blue-500 rounded-tr-md' : 'ml-auto bg-secdark rounded-tl-md'}`}>
-                      <p>{chat.msg}</p>
-                      {chat?.prod && chat.prod.map((prod, i) => {
-                        if (i < 3) return (
-                          <Link to={`/product/${prod._id}`} key={`prod${i}`} className="underline text-green-100">{prod.name}</Link>
-                        )
-                      }
-                      )}
+          }
+          <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-start gap-4 md:gap-6 p-4 md:p-6">
+            {!showingRec ?
+              products.map((product, i) => (
+                <div className="flex flex-col rounded-lg overflow-hidden border-2 shadow-lg" key={i}>
+                  <Link className="flex-1" to="#">
+                    <span className="sr-only">View</span>
+                  </Link>
+                  <img
+                    alt="Product 1"
+                    className="aspect-video w-full object-cover"
+                    height={300}
+                    src={product.image || placeholder}
+                    width={400}
+                  />
+                  <div className="flex-1 p-4 gap-4 items-start">
+                    <div className="flex items-center justify-between py-4">
+                      <h3 className="font-semibold text-base md:text-lg">{product.name}</h3>
+                      <h4 className="font-semibold text-base md:text-lg">{"₹" + product.price}</h4>
                     </div>
-                  ))}
+                    <p className="text-sm text-gray-500 py-4 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.desc}</p>
+                    <Button className="w-full" size="icon" onClick={() => navigate(`/product/${product._id}`)}>
+                      Show More
+                    </Button>
+                  </div>
                 </div>
-                <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 bg-slate-100 gap-1 rounded-b-md px-3">
-                  <input placeholder="Searching for a product?" name="chad" type="text" className="w-full p-2 outline-none bg-slate-100" />
-                  <button type="submit">
-                    <Send className="text-blue-600" />
-                  </button>
-                </form>
-              </div>
-            </>
-          )}
+              ))
+              :
+              recommandation.length > 0 &&
+              recommandation.map((product, i) => (
+                <div className="flex flex-col rounded-lg overflow-hidden border-2 shadow-lg" key={i}>
+                  <Link className="flex-1" to="#">
+                    <span className="sr-only">View</span>
+                  </Link>
+                  <img
+                    alt="Product 1"
+                    className="aspect-video w-full object-cover"
+                    height={300}
+                    src={product.image || placeholder}
+                    width={400}
+                  />
+                  <div className="flex-1 p-4 gap-4 items-start">
+                    <div className="flex items-center justify-between py-4">
+                      <h3 className="font-semibold text-base md:text-lg">{product.name}</h3>
+                      <h4 className="font-semibold text-base md:text-lg">{"₹" + product.price}</h4>
+                    </div>
+                    <p className="text-sm text-gray-500 py-4 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.desc}</p>
+                    <Button className="w-full" size="icon" onClick={() => navigate(`/product/${product._id}`)}>
+                      Show More
+                    </Button>
+                  </div>
+                </div>
+              ))
+            }
 
-        </section>
+            {!showChat ? (
+              <div className="group shadow-md">
+                <button onClick={toggleChat} className="flex flex-row shadow-md justify-center items-center fixed bottom-10 right-10 h-12 z-50 w-12 rounded-full bg-secdark hover:scale-110">
+                  <MessageCircleMore className="h-8 w-8 text-white" />
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className=" flex flex-col fixed z-50 rounded-md bottom-9 right-10 w-56 md:w-72 h-96 lg:h-[450px] lg:w-80 md:h-[400px] md:bottom-10 md:right-12 border border-slate-200 shadow-xl">
+                  <div className="chathead flex flex-row px-3 py-2 border border-b-slate-200 rounded-t-md bg-white">
+                    <p className="mr-auto font-bold text-md text-secdark">Hello Customer</p>
+                    <button onClick={toggleChat} className="text-black font-bold text-md">x</button>
+                  </div>
+                  <div ref={chatContainer} className="flex bg-white flex-col w-full h-full p-2 overflow-y-auto">
+                    {chats.map((chat, i) => (
+                      <div className="flex gap-2 items-center">
+                        <div key={i} className={`flex flex-col p-2 mb-2 text-white rounded-b-md ${chat.user === 'bot' ? 'mr-auto bg-blue-500 rounded-tr-md' : 'ml-auto bg-secdark rounded-tl-md'}`}>
+                          <p>{chat.msg}</p>
+                          {chat?.prod && chat.prod.map((prod, i) => {
+                            if (i < 3) return (
+                              <Link to={`/product/${prod._id}`} key={`prod${i}`} className="underline text-green-100">{prod.name}</Link>
+                            )
+                          }
+                          )}
+                        </div>
+                        {chat?.prod && chat.prod?.length > 0 && (
+                          <Button size="icon" variant="secondary" className="w-fit px-2" onClick={showRecommandation}>
+                            List Products
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <form onSubmit={handleChatForm} className="flex flex-row items-center w-full p-1 bg-slate-100 gap-1 rounded-b-md px-3">
+                    <input placeholder="Searching for a product?" name="chad" type="text" className="w-full p-2 outline-none bg-slate-100" />
+                    <button type="submit">
+                      <Send className="text-blue-600" />
+                    </button>
+                  </form>
+                </div>
+              </>
+            )}
+
+          </section>
+        </>
       )
         : (
           <div className="flex justify-center h-[400px] items-center text-gray-500">

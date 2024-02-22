@@ -5,18 +5,47 @@ import ProductForm from "@/components/ui/addproduct";
 import { useEffect, useState } from "react";
 import { SELLER } from "@/services/service";
 import { useRecoilState } from "recoil";
-import { loadingAtom, userDataAtom } from "@/recoil/atom";
+import { loadingAtom, toastParamAtom, userDataAtom } from "@/recoil/atom";
 import { useNavigate } from "react-router-dom";
+const BACKEND = import.meta.env.VITE_BACKEND;
 
 export default function SellerDash() {
   const [show, setShow] = useState(false);
   const [user, setUser] = useRecoilState(userDataAtom);
   const navigate = useNavigate();
   const [loadingState, setLoadingState] = useRecoilState(loadingAtom);
+  const [toastState, setToastState] = useRecoilState(toastParamAtom);
 
   const handleAddProduct = () => {
     setShow(true);
   };
+
+  const handleDelete = async (productId) => {
+    try {
+      const resp = await fetch(`${BACKEND}/product/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sellerId: user?._id, productId }),
+      });
+      const res = await resp.json();
+      console.log(res);
+      if (res.success) {
+        setToastState({
+          title: "Woah!!",
+          desc: "Successfully Deleted!",
+          hasFunc: false,
+        });
+        window.location.reload();
+      } else {
+        setToastState({ title: "Oops!", desc: res.msg, hasFunc: false });
+      }
+    } catch (error) {
+      console.log("Error while deleting the product!");
+      setToastState({ title: "Oopsy, Error!!", desc: "Error while deleting!", hasFunc: false });
+    }
+  }
 
   useEffect(() => {
     SELLER.validate(navigate, setUser, setLoadingState, '/sellerDash');
@@ -71,7 +100,7 @@ export default function SellerDash() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="font-bold">{product.price}</span>
-                      <Button size="sm">Delete</Button>
+                      <Button size="sm" onClick={() => handleDelete(product._id)}>Delete</Button>
                     </div>
                   </CardContent>
                 </Card>
