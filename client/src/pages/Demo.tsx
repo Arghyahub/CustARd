@@ -14,7 +14,7 @@ const OurOnlyProduct = [
   { name: "Boroline", category: "Cream" },
 ];
 
-const Demo = ({ arLink }:{ arLink?: string }) => {
+const Demo = ({ arLink }: { arLink?: string }) => {
   return (
     <div className="flex flex-col w-full h-[45vh]">
       <div className="flex flex-row w-full h-full border">
@@ -31,7 +31,7 @@ const Demo = ({ arLink }:{ arLink?: string }) => {
               execution-while-out-of-viewport
               execution-while-not-rendered
               web-share
-              src={arLink}
+              src={arLink + "/embed"}
             ></iframe>
           </div>
         </div>

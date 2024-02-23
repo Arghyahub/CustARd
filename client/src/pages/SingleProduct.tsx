@@ -47,15 +47,17 @@ export default function Component() {
   }, [id]);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 w-full">
+    <div className="bg-gray-100 dark:bg-gray-900 w-full">
       {detail && (
-        <div className="lg:flex py-12 lg:py-16 w-full">
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto w-full my-4 border">
+        <div className="py-8 lg:py-12 w-full">
+          <Link to="/products" className="text-[#429baf] hover:text-[#42a7be] underline px-10"> &lt;- Back</Link>
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-7xl px-4 mx-auto w-full my-4 border">
             <div className="flex flex-col gap-4 lg:gap-8 items-start w-full py-10 px-10">
               <h1 className="font-bold text-3xl sm:text-5xl tracking-tighter">
                 {detail.name}
               </h1>
               <div className="flex items-center gap-4">
+                <h4 className="font-semibold text-base md:text-lg">{"₹" + detail.price}</h4>
                 <div className="flex items-center gap-0.5">
                   <StarIcon className="w-5 h-5 fill-primary" />
                   <StarIcon className="w-5 h-5 fill-primary" />
