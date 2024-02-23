@@ -58,6 +58,23 @@ router.get("/:id", async (req: Request, res: Response) => {
         console.log(":: Error in deleting product /product (product.ts) ::", error);
         return res.status(500).json({ success: false, msg: "Internal server error" });
     }
+}).put("/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { name, desc, price, image, arLink, keywords } = req.body;
+        const product = await ProductModel.findByIdAndUpdate(id, {
+            name: name,
+            desc: desc,
+            price: price,
+            arLink: arLink,
+            image: image,
+            keywords: keywords
+        }, { new: true });
+        return res.status(200).json({ success: true, product });
+    } catch (error) {
+        console.log(":: Error in updating products / (product.ts)", error);
+        return res.status(500).json({ success: false, msg: "Internal server error!" });
+    }
 })
 
 // Returning a product list based on the keywords recv from req
