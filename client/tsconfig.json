@@ -28,6 +28,6 @@
       ]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/assets/LogoSVG.jsx"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }
