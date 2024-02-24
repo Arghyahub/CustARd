@@ -53,7 +53,7 @@ export default function SellerDash() {
 
 
   return (
-    <div className="flex-1 w-screen">
+    <div className="flex-1 w-full">
       <Navbar />
       <Card>
         <CardHeader className="flex flex-row items-center space-y-0">
@@ -77,9 +77,12 @@ export default function SellerDash() {
       <Card>
         <CardHeader>
           <CardTitle>Existing Products</CardTitle>
-          <Button className="my-3" onClick={handleAddProduct}>
-            Add New Product +
-          </Button>
+          <div>
+            <Button className="my-3" onClick={handleAddProduct}>
+              Add New Product +
+            </Button>
+          </div>
+
           {show ? (
             <div className="absolute top-0 w-[700px]">
               <ProductForm />
@@ -99,7 +102,9 @@ export default function SellerDash() {
                       {product.desc}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="font-bold">{product.price}</span>
+                      <span className="font-bold">
+                        {"₹" + product.price}
+                      </span>
                       <Button size="sm" onClick={() => handleDelete(product._id)}>Delete</Button>
                     </div>
                   </CardContent>

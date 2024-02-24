@@ -1,11 +1,9 @@
 import React from "react";
 
 import { cn } from "@/lib/utils";
-import { 
-  BarsSVG, 
-  LogoSVG,
-  UserSVG
-
+import {
+  BarsSVG,
+  LogoSVG
 } from "../../assets/index";
 import Sidebar from "../sidebar/Sidebar";
 import NavDropDown from "./NavDropDown";
@@ -29,7 +27,7 @@ const Navbar = ({ className = "" }) => {
 
       {/* Right options */}
       <div className="ml-auto mr-4 h-full flex flex-row items-center">
-        <NavDropDown/>
+        <NavDropDown />
       </div>
 
     </div>

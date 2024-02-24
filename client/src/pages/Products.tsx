@@ -196,7 +196,7 @@ export default function Products() {
                   />
                   <div className="flex-1 p-4 gap-4 items-start">
                     <div className="flex items-center justify-between py-4">
-                      <h3 className="font-semibold text-base md:text-lg">{product.name}</h3>
+                      <h3 className="font-semibold text-base md:text-lg overflow-hidden whitespace-nowrap overflow-ellipsis">{product.name}</h3>
                       <h4 className="font-semibold text-base md:text-lg">{"₹" + product.price}</h4>
                     </div>
                     <p className="text-sm text-gray-500 py-4 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.desc}</p>
